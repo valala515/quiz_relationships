@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NewMindStart — How Trauma Shapes Your Relationships</title>
+    <meta
+      name="description"
+      content="Discover your hidden relationship patterns and break the cycle. A 3-minute personalised quiz by NewMindStart."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="./assets/newmindstart-logo.png" as="image" />
+    <link rel="preload" href="./assets/gender-man.avif" as="image" />
+    <link rel="preload" href="./assets/gender-woman.avif" as="image" />
+    <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" /></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&display=swap" /></noscript>
+    <link rel="stylesheet" href="./styles.css?v=1.0.0" />
+  </head>
+  <body>
+    <header class="top-bar top-bar--intro">
+      <div class="top-bar__inner">
+        <div class="site-header">
+          <button id="backButton" class="back-button" type="button" aria-label="Go back one step">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path
+                d="M15 8H1M6 3.05 1 8l5 5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <a class="logo-wrap" href="#" aria-label="NewMindStart home">
+            <img class="logo-image" src="./assets/newmindstart-logo.png" alt="NewMindStart" width="468" height="72" />
+          </a>
+          <span id="headerStepCount" class="header-step-count" aria-live="polite"></span>
+          <div id="headerOfferUtility" class="header-offer" hidden>
+            <span class="header-offer__label">Discount is reserved for:</span>
+            <span id="headerCountdown" class="header-offer__timer" aria-live="polite">08:38</span>
+            <button id="headerOfferButton" class="header-offer__button" type="button">Get my plan</button>
+          </div>
+        </div>
+      </div>
+      <section class="progress-wrap is-hidden" aria-label="Quiz progress">
+        <div class="progress-track">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </section>
+    </header>
+
+    <div class="page-shell">
+      <main class="app-shell">
+        <section id="app" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/easytimer.js@4.6.0/dist/easytimer.min.js"></script>
+    <script src="./assets/confetti.browser.min.js"></script>
+    <script src="./monitoring.js"></script>
+    <script src="./api.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

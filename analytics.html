@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relationships Quiz Analytics - NewMindStart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" />
+    </noscript>
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&display=swap" />
+    </noscript>
+    <link rel="stylesheet" href="./styles.css?v=1.0.0" />
+    <style>
+      .an-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: calc(var(--header-height) + 28px) 16px 60px;
+      }
+
+      .an-page-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+
+      .an-page-title {
+        margin: 0;
+        color: var(--color-ink);
+        font-family: var(--font-display);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      .an-last-updated {
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-mock-banner {
+        margin-bottom: 20px;
+        padding: 11px 16px;
+        border: 1px solid rgba(200, 155, 0, 0.28);
+        border-radius: 12px;
+        background: rgba(245, 198, 77, 0.18);
+        color: #7a6000;
+        font-size: 13px;
+      }
+
+      .an-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .an-stats--loading {
+        grid-template-columns: repeat(2, minmax(220px, 300px));
+        justify-content: start;
+      }
+
+      .an-stat {
+        min-width: 0;
+        padding: 20px 20px 16px;
+        border-radius: var(--radius-16);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .an-stat__label {
+        margin-bottom: 8px;
+        color: var(--color-ink-soft);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-stat__value {
+        margin-bottom: 4px;
+        color: var(--color-ink);
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .an-stat__sub {
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-card,
+      .an-funnel,
+      .an-timing,
+      .an-stept,
+      .an-campaign,
+      .an-ab-section {
+        margin-bottom: 20px;
+        border-radius: var(--radius-22);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .an-funnel,
+      .an-timing,
+      .an-stept,
+      .an-campaign,
+      .an-ab-section {
+        padding: 22px 24px;
+      }
+
+      .an-section-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .an-section-label {
+        margin: 0;
+        color: var(--color-ink-soft);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-section-note {
+        margin-top: 4px;
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-help {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .an-help__btn {
+        width: 30px;
+        height: 30px;
+        border: 1.5px solid var(--color-line-strong);
+        border-radius: 50%;
+        background: var(--color-surface);
+        color: var(--color-ink-soft);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .an-help__btn:hover,
+      .an-help__btn:focus-visible {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        outline: none;
+      }
+
+      .an-help__pop {
+        position: absolute;
+        top: 38px;
+        right: 0;
+        z-index: 10;
+        width: min(330px, calc(100vw - 32px));
+        padding: 14px 16px;
+        border: 1px solid var(--color-line);
+        border-radius: 12px;
+        background: var(--color-surface);
+        box-shadow: 0 18px 40px rgba(20, 25, 35, 0.14);
+        color: var(--color-ink-soft);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .an-help__pop p {
+        margin: 0 0 8px;
+      }
+
+      .an-help__pop p:last-child {
+        margin-bottom: 0;
+      }
+
+      .an-ab-health {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .an-ab-health__card {
+        padding: 14px 16px;
+        border-radius: var(--radius-16);
+        background: var(--color-surface-muted);
+      }
+
+      .an-ab-health__label {
+        margin: 0 0 6px;
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-ab-health__value {
+        margin: 0;
+        color: var(--color-ink);
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .an-ab-health__sub {
+        margin-top: 2px;
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-ab-status {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .an-ab-status--ok {
+        background: rgba(0, 136, 64, 0.12);
+        color: #008840;
+      }
+
+      .an-ab-status--warn {
+        background: rgba(245, 198, 77, 0.26);
+        color: #8a6800;
+      }
+
+      .an-ab-status--risk {
+        background: rgba(255, 79, 0, 0.12);
+        color: #c2410c;
+      }
+
+      .an-ab-tables {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 18px;
+      }
+
+      .an-mini-table-scroll {
+        overflow-x: auto;
+      }
+
+      .an-mini-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .an-mini-table th,
+      .an-mini-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--color-line);
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .an-mini-table th {
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-mini-table td {
+        color: var(--color-ink);
+      }
+
+      .an-mini-table td:not(:first-child),
+      .an-mini-table th:not(:first-child) {
+        text-align: right;
+      }
+
+      .an-delta--up {
+        color: #008840;
+        font-weight: 700;
+      }
+
+      .an-delta--down {
+        color: #c2410c;
+        font-weight: 700;
+      }
+
+      .an-funnel__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 9px;
+      }
+
+      .an-funnel__row:last-child {
+        margin-bottom: 0;
+      }
+
+      .an-funnel__label {
+        width: 150px;
+        flex-shrink: 0;
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-funnel__bar-track,
+      .an-stept__bar-track {
+        flex: 1;
+        height: 8px;
+        overflow: hidden;
+        border-radius: 9999px;
+        background: var(--color-line);
+      }
+
+      .an-funnel__bar,
+      .an-stept__bar {
+        height: 100%;
+        border-radius: 9999px;
+        background: var(--color-primary);
+        transition: width 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .an-funnel__bar--late {
+        background: var(--color-accent);
+      }
+
+      .an-funnel__n {
+        width: 58px;
+        flex-shrink: 0;
+        color: var(--color-ink);
+        font-size: 13px;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .an-funnel__pct {
+        width: 42px;
+        flex-shrink: 0;
+        color: var(--color-ink-soft);
+        font-size: 12px;
+        text-align: right;
+      }
+
+      .an-timing-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .an-timing-col {
+        min-width: 0;
+        padding: 14px 16px;
+        border-radius: var(--radius-16);
+        background: var(--color-surface-muted);
+      }
+
+      .an-timing-col__head {
+        margin-bottom: 2px;
+        color: var(--color-ink);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .an-timing-col__sub {
+        margin-bottom: 12px;
+        color: var(--color-ink-soft);
+        font-size: 11px;
+      }
+
+      .an-timing-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--color-line);
+      }
+
+      .an-timing-row:last-child {
+        border-bottom: 0;
+      }
+
+      .an-timing-row__label {
+        color: var(--color-ink-soft);
+        font-size: 11px;
+      }
+
+      .an-timing-row__val {
+        color: var(--color-ink);
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .an-stept__body {
+        max-height: 420px;
+        overflow-y: auto;
+      }
+
+      .an-stept__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--color-line);
+      }
+
+      .an-stept__row:last-child {
+        border-bottom: 0;
+      }
+
+      .an-stept__row--header {
+        padding-bottom: 7px;
+      }
+
+      .an-stept__label {
+        width: 176px;
+        flex-shrink: 0;
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-stept__row--header .an-stept__label,
+      .an-stept__row--header .an-stept__avg,
+      .an-stept__row--header .an-stept__n {
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-stept__bar-track {
+        height: 6px;
+      }
+
+      .an-stept__avg {
+        width: 54px;
+        flex-shrink: 0;
+        color: var(--color-ink);
+        font-size: 13px;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .an-stept__n {
+        width: 44px;
+        flex-shrink: 0;
+        color: var(--color-ink-soft);
+        font-size: 11px;
+        text-align: right;
+      }
+
+      .an-filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding: 14px 18px;
+        border-radius: var(--radius-16);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .an-fg {
+        display: flex;
+        min-width: 120px;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .an-fg--grow {
+        flex: 1;
+        min-width: 170px;
+      }
+
+      .an-fg label {
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-fg input,
+      .an-fg select {
+        width: 100%;
+        height: 34px;
+        padding: 0 10px;
+        border: 1.5px solid var(--color-line-strong);
+        border-radius: 9px;
+        outline: none;
+        background: var(--color-bg);
+        color: var(--color-ink);
+        font-family: var(--font-ui);
+        font-size: 13px;
+      }
+
+      .an-fg input:focus,
+      .an-fg select:focus {
+        border-color: var(--color-primary);
+      }
+
+      .an-btn,
+      .an-export-btn {
+        height: 34px;
+        border-radius: 9px;
+        font-family: var(--font-ui);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .an-btn {
+        align-self: flex-end;
+        padding: 0 14px;
+      }
+
+      .an-btn--ghost,
+      .an-export-btn {
+        border: 1.5px solid var(--color-line-strong);
+        background: transparent;
+        color: var(--color-ink-soft);
+      }
+
+      .an-btn--ghost:hover,
+      .an-export-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
+
+      .an-campaign-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .an-campaign-chart__head,
+      .an-campaign-performance__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+
+      .an-campaign-chart__title,
+      .an-campaign-performance__title {
+        color: var(--color-ink);
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .an-campaign-chart__sub,
+      .an-campaign-performance__note {
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-donut {
+        display: grid;
+        grid-template-columns: 160px minmax(0, 1fr);
+        align-items: center;
+        gap: 18px;
+        min-height: 170px;
+      }
+
+      .an-donut svg {
+        display: block;
+        width: 160px;
+        height: 160px;
+      }
+
+      .an-donut__track,
+      .an-donut__slice {
+        fill: none;
+        stroke-width: 18;
+      }
+
+      .an-donut__track {
+        stroke: var(--color-line);
+      }
+
+      .an-donut__slice {
+        cursor: pointer;
+        pointer-events: stroke;
+        transition: stroke-width 160ms ease, opacity 160ms ease;
+      }
+
+      .an-donut__slice:hover,
+      .an-donut__slice.is-active {
+        stroke-width: 24;
+        opacity: 0.92;
+      }
+
+      .an-donut__total {
+        fill: var(--color-ink);
+        font-size: 16px;
+        font-weight: 700;
+        text-anchor: middle;
+      }
+
+      .an-donut__label {
+        fill: var(--color-ink-soft);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-anchor: middle;
+        text-transform: uppercase;
+      }
+
+      .an-donut-legend {
+        display: grid;
+        gap: 7px;
+        min-width: 0;
+      }
+
+      .an-donut-legend__row {
+        display: grid;
+        grid-template-columns: 10px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        margin: -2px -4px;
+        padding: 2px 4px;
+        border-radius: 7px;
+        color: var(--color-ink-soft);
+        cursor: pointer;
+        font-size: 12px;
+        outline: none;
+      }
+
+      .an-donut-legend__row:hover,
+      .an-donut-legend__row.is-active {
+        background: var(--color-surface-muted);
+      }
+
+      .an-donut-legend__swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+
+      .an-donut-legend__label {
+        overflow: hidden;
+        color: var(--color-ink);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .an-donut-legend__value {
+        color: var(--color-ink-soft);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .an-campaign-empty,
+      .an-state {
+        color: var(--color-ink-soft);
+        font-size: 13px;
+      }
+
+      .an-campaign-empty {
+        display: flex;
+        min-height: 120px;
+        align-items: center;
+      }
+
+      .an-campaign-performance {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid var(--color-line);
+      }
+
+      .an-campaign-table-scroll,
+      .an-table-scroll {
+        overflow-x: auto;
+      }
+
+      .an-campaign-table,
+      .an-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .an-campaign-table th,
+      .an-campaign-table td,
+      .an-table th,
+      .an-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--color-line);
+        color: var(--color-ink);
+        vertical-align: middle;
+        white-space: nowrap;
+      }
+
+      .an-campaign-table th,
+      .an-table th {
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-align: left;
+        text-transform: uppercase;
+        user-select: none;
+      }
+
+      .an-campaign-table th[data-campaign-sort],
+      .an-table th[data-sort] {
+        cursor: pointer;
+      }
+
+      .an-campaign-table th[data-campaign-sort]:hover,
+      .an-table th[data-sort]:hover {
+        color: var(--color-primary);
+      }
+
+      .an-campaign-table__num {
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .an-campaign-table__rate {
+        font-weight: 700;
+      }
+
+      .an-campaign-table__campaign {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 220px;
+        max-width: 440px;
+      }
+
+      .an-campaign-table__swatch {
+        width: 10px;
+        height: 10px;
+        flex: 0 0 auto;
+        border-radius: 999px;
+      }
+
+      .an-campaign-table__name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .an-campaign-table__tag {
+        flex: 0 0 auto;
+        padding: 2px 6px;
+        border: 1px solid var(--color-line-strong);
+        border-radius: 7px;
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .an-card {
+        overflow: hidden;
+      }
+
+      .an-card__toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 20px 12px;
+        border-bottom: 1px solid var(--color-line);
+      }
+
+      .an-card__count {
+        color: var(--color-ink-soft);
+        font-size: 13px;
+      }
+
+      .an-export-btn {
+        height: 30px;
+        padding: 0 12px;
+        font-size: 12px;
+      }
+
+      .an-table tbody tr[data-uid] {
+        cursor: pointer;
+      }
+
+      .an-table tbody tr[data-uid]:hover {
+        background: var(--color-surface-muted);
+      }
+
+      .an-table tbody tr.is-open {
+        background: var(--color-primary-fade);
+      }
+
+      .an-table__date,
+      .an-table__meta,
+      .an-table__mono {
+        color: var(--color-ink-soft);
+        font-size: 12px;
+      }
+
+      .an-table__mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .an-table__email {
+        font-weight: 600;
+      }
+
+      .an-null {
+        color: var(--color-ink-soft);
+      }
+
+      .an-badge,
+      .an-variant {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      .an-badge {
+        min-height: 22px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+      }
+
+      .an-badge--started {
+        background: var(--color-line);
+        color: var(--color-ink-soft);
+      }
+
+      .an-badge--email {
+        background: var(--color-accent-fade);
+        color: var(--color-accent);
+      }
+
+      .an-badge--offer-page,
+      .an-badge--checkout {
+        background: rgba(245, 198, 77, 0.22);
+        color: #8a6800;
+      }
+
+      .an-badge--checkout-page {
+        background: rgba(0, 80, 255, 0.12);
+        color: var(--color-accent);
+      }
+
+      .an-badge--paid {
+        background: rgba(0, 136, 64, 0.12);
+        color: #008840;
+      }
+
+      .an-variant {
+        min-width: 54px;
+        height: 24px;
+        padding: 0 8px;
+        border-radius: 7px;
+        font-size: 11px;
+      }
+
+      .an-variant--orange {
+        background: var(--color-primary-fade);
+        color: var(--color-primary);
+      }
+
+      .an-variant--blue {
+        background: var(--color-accent-fade);
+        color: var(--color-accent);
+      }
+
+      .an-variant--green {
+        background: rgba(0, 136, 64, 0.12);
+        color: #008840;
+      }
+
+      .an-variant--unknown {
+        background: var(--color-line);
+        color: var(--color-ink-soft);
+      }
+
+      tr.an-journey-row > td {
+        padding: 0;
+        border-bottom: 1px solid var(--color-line);
+        background: var(--color-bg);
+        cursor: default;
+      }
+
+      .an-journey {
+        padding: 14px 20px 16px;
+      }
+
+      .an-journey__label {
+        margin-bottom: 10px;
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .an-journey__steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+
+      .an-step-pill {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: var(--color-line);
+        color: var(--color-ink-soft);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .an-step-pill--key {
+        background: var(--color-primary-fade);
+        color: var(--color-primary);
+      }
+
+      .an-step-pill--paid {
+        background: rgba(0, 136, 64, 0.12);
+        color: #008840;
+      }
+
+      .an-step-time {
+        display: inline-block;
+        padding: 0 4px;
+        color: var(--color-ink-soft);
+        font-size: 10px;
+        font-weight: 700;
+        opacity: 0.75;
+        vertical-align: middle;
+      }
+
+      .an-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 18px;
+        flex-wrap: wrap;
+      }
+
+      .an-pg-btn {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 9px;
+        border: 1.5px solid var(--color-line-strong);
+        border-radius: 7px;
+        background: var(--color-surface);
+        color: var(--color-ink);
+        font-family: var(--font-ui);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .an-pg-btn:hover:not(:disabled) {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
+
+      .an-pg-btn.is-active {
+        border-color: var(--color-primary);
+        background: var(--color-primary);
+        color: #fff;
+      }
+
+      .an-pg-btn:disabled {
+        cursor: default;
+        opacity: 0.35;
+      }
+
+      .an-pg-dots {
+        padding: 0 2px;
+        color: var(--color-ink-soft);
+        font-size: 13px;
+        line-height: 32px;
+      }
+
+      .an-state {
+        padding: 52px 20px;
+        text-align: center;
+      }
+
+      .an-card code,
+      .an-mock-banner code,
+      .an-help code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.95em;
+      }
+
+      @media (max-width: 900px) {
+        .an-ab-tables,
+        .an-campaign-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .an-timing-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .an-shell {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        .an-funnel,
+        .an-timing,
+        .an-stept,
+        .an-campaign,
+        .an-ab-section {
+          padding: 18px 16px;
+        }
+
+        .an-table th:nth-child(n+6),
+        .an-table td:nth-child(n+6) {
+          display: none;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .an-stats--loading,
+        .an-timing-grid,
+        .an-donut {
+          grid-template-columns: 1fr;
+        }
+
+        .an-donut svg {
+          margin: 0 auto;
+        }
+
+        .an-funnel__label {
+          width: 108px;
+        }
+
+        .an-stept__label {
+          width: 128px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .an-table th:nth-child(n+5),
+        .an-table td:nth-child(n+5) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar top-bar--intro">
+      <div class="top-bar__inner">
+        <div class="site-header">
+          <div></div>
+          <a class="logo-wrap" href="./index.html" aria-label="Back to quiz">
+            <img class="logo-image" src="./assets/newmindstart-logo.png" alt="NewMindStart" width="468" height="72" />
+          </a>
+          <div></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-shell">
+      <main class="an-shell">
+        <div class="an-page-header">
+          <h1 class="an-page-title">Relationships Quiz Analytics</h1>
+          <span class="an-last-updated" id="lastUpdated">Loading sessions...</span>
+        </div>
+
+        <div class="an-mock-banner" id="mockBanner" hidden>
+          Preview mode - showing generated sample data. Live analytics appears when <code>/analytics/sessions</code> is available.
+        </div>
+
+        <section class="an-stats" aria-label="Summary stats">
+          <article class="an-stat">
+            <div class="an-stat__label">Total Sessions</div>
+            <div class="an-stat__value" id="statTotal">-</div>
+          </article>
+          <article class="an-stat">
+            <div class="an-stat__label">Email Captured</div>
+            <div class="an-stat__value" id="statEmail">-</div>
+            <div class="an-stat__sub" id="statEmailSub"></div>
+          </article>
+          <article class="an-stat">
+            <div class="an-stat__label">Offer Page Reached</div>
+            <div class="an-stat__value" id="statOffer">-</div>
+            <div class="an-stat__sub" id="statOfferSub"></div>
+          </article>
+          <article class="an-stat">
+            <div class="an-stat__label">Checkout Page Reached</div>
+            <div class="an-stat__value" id="statCheckout">-</div>
+            <div class="an-stat__sub" id="statCheckoutSub"></div>
+          </article>
+          <article class="an-stat">
+            <div class="an-stat__label">Paid</div>
+            <div class="an-stat__value" id="statPaid">-</div>
+            <div class="an-stat__sub" id="statPaidSub"></div>
+          </article>
+        </section>
+
+        <section class="an-stats an-stats--loading" aria-label="Loading diagnostics">
+          <article class="an-stat">
+            <div class="an-stat__label">First Screen Rendered</div>
+            <div class="an-stat__value" id="statFirstScreen">-</div>
+            <div class="an-stat__sub" id="statFirstScreenSub"></div>
+            <div class="an-stat__sub" id="statFirstScreenWindow"></div>
+          </article>
+          <article class="an-stat">
+            <div class="an-stat__label">Load Loss</div>
+            <div class="an-stat__value" id="statLoadLoss">-</div>
+            <div class="an-stat__sub" id="statLoadLossSub"></div>
+            <div class="an-stat__sub" id="statLoadLossWindow"></div>
+          </article>
+        </section>
+
+        <section class="an-ab-section" aria-label="Offer theme experiment">
+          <div class="an-section-head">
+            <div>
+              <p class="an-section-label">Offer Theme A/B Test</p>
+              <div class="an-section-note">Orange vs Blue vs Green, using Statsig assignments only for decision readouts.</div>
+            </div>
+            <div class="an-help">
+              <button class="an-help__btn" id="abHelpButton" type="button" aria-expanded="false" aria-controls="abHelpPopover">?</button>
+              <div class="an-help__pop" id="abHelpPopover" hidden>
+                <p><strong>Offer Page</strong> is the screen with plans, pricing, reviews, and Get my plan buttons. Technical step: <code>offer-page</code>.</p>
+                <p><strong>Checkout Page</strong> is the payment page/form after the user clicks Get my plan. Technical step: <code>checkout-page</code>.</p>
+                <p>Rows with URL overrides or missing Statsig source are shown in diagnostics but excluded from the decision table.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="an-ab-health">
+            <article class="an-ab-health__card">
+              <p class="an-ab-health__label">Experiment</p>
+              <p class="an-ab-health__value" id="abExperimentName">-</p>
+              <div class="an-ab-health__sub" id="abExperimentStart">-</div>
+            </article>
+            <article class="an-ab-health__card">
+              <p class="an-ab-health__label">Orange</p>
+              <p class="an-ab-health__value" id="abOrangeSessions">-</p>
+              <div class="an-ab-health__sub">Variant A / orange</div>
+            </article>
+            <article class="an-ab-health__card">
+              <p class="an-ab-health__label">Blue</p>
+              <p class="an-ab-health__value" id="abBlueSessions">-</p>
+              <div class="an-ab-health__sub">Variant B / blue</div>
+            </article>
+            <article class="an-ab-health__card">
+              <p class="an-ab-health__label">Green</p>
+              <p class="an-ab-health__value" id="abGreenSessions">-</p>
+              <div class="an-ab-health__sub">Variant C / green</div>
+            </article>
+            <article class="an-ab-health__card">
+              <p class="an-ab-health__label">Assignment Health</p>
+              <p class="an-ab-health__value"><span class="an-ab-status an-ab-status--warn" id="abHealthStatus">-</span></p>
+              <div class="an-ab-health__sub" id="abHealthSub">-</div>
+            </article>
+          </div>
+
+          <div class="an-ab-tables">
+            <div class="an-mini-table-scroll">
+              <table class="an-mini-table">
+                <thead>
+                  <tr>
+                    <th>Variant</th>
+                    <th>Sessions</th>
+                    <th>Email</th>
+                    <th>Offer Page</th>
+                    <th>Checkout Page</th>
+                    <th>Paid</th>
+                  </tr>
+                </thead>
+                <tbody id="abSummaryBody">
+                  <tr><td colspan="6">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="an-mini-table-scroll">
+              <table class="an-mini-table">
+                <thead>
+                  <tr>
+                    <th>Checkpoint</th>
+                    <th>Orange</th>
+                    <th>Blue</th>
+                    <th>Green</th>
+                    <th>Best delta</th>
+                  </tr>
+                </thead>
+                <tbody id="abFunnelBody">
+                  <tr><td colspan="5">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="an-funnel" aria-label="Drop-off funnel">
+          <p class="an-section-label">Drop-Off Funnel</p>
+          <div id="funnelRows"></div>
+        </section>
+
+        <section class="an-timing" aria-label="Screen performance">
+          <p class="an-section-label">Screen-By-Screen Performance</p>
+          <div class="an-timing-grid">
+            <article class="an-timing-col">
+              <div class="an-timing-col__head">Page 1</div>
+              <div class="an-timing-col__sub">Gender / first screen</div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Sessions with data</span><span class="an-timing-row__val" id="pt-page1-n">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Avg dwell</span><span class="an-timing-row__val" id="pt-page1-avg">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Engaged</span><span class="an-timing-row__val" id="pt-page1-eng">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Advanced</span><span class="an-timing-row__val" id="pt-page1-comp">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Dropped off here</span><span class="an-timing-row__val" id="pt-page1-drop">-</span></div>
+            </article>
+            <article class="an-timing-col">
+              <div class="an-timing-col__head">Page 2</div>
+              <div class="an-timing-col__sub">Age</div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Sessions with data</span><span class="an-timing-row__val" id="pt-page2-n">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Avg dwell</span><span class="an-timing-row__val" id="pt-page2-avg">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Engaged</span><span class="an-timing-row__val" id="pt-page2-eng">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Advanced</span><span class="an-timing-row__val" id="pt-page2-comp">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Dropped off here</span><span class="an-timing-row__val" id="pt-page2-drop">-</span></div>
+            </article>
+            <article class="an-timing-col">
+              <div class="an-timing-col__head">Page 3</div>
+              <div class="an-timing-col__sub">Welcome</div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Sessions with data</span><span class="an-timing-row__val" id="pt-page3-n">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Avg dwell</span><span class="an-timing-row__val" id="pt-page3-avg">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Engaged</span><span class="an-timing-row__val" id="pt-page3-eng">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Advanced</span><span class="an-timing-row__val" id="pt-page3-comp">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Dropped off here</span><span class="an-timing-row__val" id="pt-page3-drop">-</span></div>
+            </article>
+            <article class="an-timing-col">
+              <div class="an-timing-col__head">Offer Page</div>
+              <div class="an-timing-col__sub">Plans / pricing</div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Sessions reached</span><span class="an-timing-row__val" id="pt-offer-n">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Opened checkout</span><span class="an-timing-row__val" id="pt-offer-checkout">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Paid</span><span class="an-timing-row__val" id="pt-offer-paid">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Paid / Offer</span><span class="an-timing-row__val" id="pt-offer-rate">-</span></div>
+              <div class="an-timing-row"><span class="an-timing-row__label">Did not pay</span><span class="an-timing-row__val" id="pt-offer-drop">-</span></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="an-stept" aria-label="Average time per step">
+          <p class="an-section-label">Avg Time Per Step</p>
+          <div class="an-stept__body">
+            <div class="an-stept__row an-stept__row--header">
+              <span class="an-stept__label">Step</span>
+              <div class="an-stept__bar-track" style="background:transparent"></div>
+              <span class="an-stept__avg">Avg</span>
+              <span class="an-stept__n">Users</span>
+            </div>
+            <div id="stepTimingBody">
+              <div class="an-state" style="padding:24px">Loading...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="an-filters" aria-label="Filters">
+          <div class="an-fg">
+            <label for="filterFrom">From</label>
+            <input type="date" id="filterFrom" />
+          </div>
+          <div class="an-fg">
+            <label for="filterTo">To</label>
+            <input type="date" id="filterTo" />
+          </div>
+          <div class="an-fg">
+            <label for="filterVariant">Variant</label>
+            <select id="filterVariant">
+              <option value="">All</option>
+              <option value="orange">Orange</option>
+              <option value="blue">Blue</option>
+              <option value="green">Green</option>
+            </select>
+          </div>
+          <div class="an-fg">
+            <label for="filterUtmSource">UTM Source</label>
+            <select id="filterUtmSource"><option value="">All</option></select>
+          </div>
+          <div class="an-fg">
+            <label for="filterUtmMedium">UTM Medium</label>
+            <select id="filterUtmMedium"><option value="">All</option></select>
+          </div>
+          <div class="an-fg">
+            <label for="filterUtmCampaign">UTM Campaign</label>
+            <select id="filterUtmCampaign"><option value="">All</option></select>
+          </div>
+          <div class="an-fg an-fg--grow">
+            <label for="filterUtmSearch">Search UTM</label>
+            <input type="text" id="filterUtmSearch" placeholder="campaign, source, medium" />
+          </div>
+          <div class="an-fg">
+            <label for="filterStatus">Status</label>
+            <select id="filterStatus">
+              <option value="">All</option>
+              <option value="started">Started only</option>
+              <option value="email">Email captured</option>
+              <option value="checkout">Offer Page</option>
+              <option value="checkout-page">Checkout Page</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <div class="an-fg">
+            <label for="filterStep">Reached Step</label>
+            <select id="filterStep">
+              <option value="">All</option>
+              <option value="gender">gender</option>
+              <option value="age">age</option>
+              <option value="welcome">welcome</option>
+              <option value="question-5">question-5</option>
+              <option value="question-10">question-10</option>
+              <option value="email">email</option>
+              <option value="first-name">first-name</option>
+              <option value="nervous-system-profile">nervous-system-profile</option>
+              <option value="offer-page">offer-page</option>
+              <option value="checkout-page">checkout-page</option>
+              <option value="paid">paid</option>
+            </select>
+          </div>
+          <div class="an-fg an-fg--grow">
+            <label for="filterSearch">Search Email</label>
+            <input type="text" id="filterSearch" placeholder="name@example.com" />
+          </div>
+          <button class="an-btn an-btn--ghost" onclick="Analytics.resetFilters()">Reset</button>
+        </section>
+
+        <section class="an-campaign" aria-label="UTM campaign insights">
+          <p class="an-section-label">UTM Campaign Insights</p>
+          <div class="an-campaign-grid">
+            <div class="an-campaign-chart">
+              <div class="an-campaign-chart__head">
+                <div class="an-campaign-chart__title">Traffic by UTM Campaign</div>
+                <div class="an-campaign-chart__sub" id="campaignTrafficTotal">-</div>
+              </div>
+              <div class="an-donut" id="campaignTrafficChart">
+                <div class="an-campaign-empty">Loading...</div>
+              </div>
+            </div>
+            <div class="an-campaign-chart">
+              <div class="an-campaign-chart__head">
+                <div class="an-campaign-chart__title">Second Screen by UTM Campaign</div>
+                <div class="an-campaign-chart__sub" id="campaignSecondScreenTotal">-</div>
+              </div>
+              <div class="an-donut" id="campaignSecondScreenChart">
+                <div class="an-campaign-empty">Loading...</div>
+              </div>
+            </div>
+          </div>
+          <div class="an-campaign-performance">
+            <div class="an-campaign-performance__head">
+              <div class="an-campaign-performance__title">Campaign Funnel Performance</div>
+              <div class="an-campaign-performance__note" id="campaignPerformanceNote">Reliable ranking needs 20+ sessions per campaign.</div>
+            </div>
+            <div id="campaignPerformanceBody">
+              <div class="an-campaign-empty">Loading...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="an-card" aria-label="Sessions table">
+          <div class="an-card__toolbar">
+            <span class="an-card__count" id="tableCount">Loading...</span>
+            <button class="an-export-btn" onclick="Analytics.exportCSV()">Export CSV</button>
+          </div>
+          <div class="an-table-scroll">
+            <div id="tableBody">
+              <div class="an-state">Loading sessions...</div>
+            </div>
+          </div>
+          <div class="an-pagination" id="pagination"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./analytics.js?v=1.0.0"></script>
+  </body>
+</html>

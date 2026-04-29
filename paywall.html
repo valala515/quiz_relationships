@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NewMindStart — Complete Your Order</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="./assets/newmindstart-logo.png" as="image" />
+    <link
+      rel="preload"
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
+      />
+    </noscript>
+    <style>
+      /* ─── Base reset & tokens ─────────────────────────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --font-body:     "Satoshi", "Avenir Next", "Segoe UI", sans-serif;
+        --color-bg:      #f5f5f7;
+        --color-surface: #ffffff;
+        --color-ink:     #191919;
+        --color-ink-soft:#65708c;
+        --color-accent:  #0050ff;
+        --color-cta:     #e84800;
+        --color-border:  #e2e6ef;
+        --color-green:   #008840;
+        --radius-card:   16px;
+        --shadow-card:   0 2px 16px rgba(0,0,0,0.08);
+      }
+
+      html, body {
+        height: 100%;
+        background: var(--color-bg);
+        color: var(--color-ink);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ─── Layout ───────────────────────────────────────────────────────────── */
+      .pw-shell {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .pw-header {
+        width: 100%;
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .pw-header__logo {
+        height: 28px;
+        width: auto;
+        display: block;
+      }
+
+      .pw-main {
+        width: 100%;
+        max-width: 480px;
+        padding: 28px 20px 60px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* ─── Plan summary card ───────────────────────────────────────────────── */
+      .pw-plan-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 20px;
+      }
+
+      .pw-plan-card__eyebrow {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-ink-soft);
+        margin-bottom: 10px;
+      }
+
+      .pw-plan-card__row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .pw-plan-card__name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--color-ink);
+      }
+
+      .pw-plan-card__desc {
+        font-size: 0.8125rem;
+        color: var(--color-ink-soft);
+        margin-top: 2px;
+      }
+
+      .pw-plan-card__price-block {
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      .pw-plan-card__price {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--color-ink);
+        white-space: nowrap;
+      }
+
+      .pw-plan-card__price-orig {
+        font-size: 0.8125rem;
+        color: var(--color-ink-soft);
+        text-decoration: line-through;
+        white-space: nowrap;
+      }
+
+      .pw-plan-card__divider {
+        border: none;
+        border-top: 1px solid var(--color-border);
+        margin: 14px 0;
+      }
+
+      .pw-plan-card__guarantee {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8125rem;
+        color: var(--color-green);
+        font-weight: 500;
+      }
+
+      .pw-plan-card__guarantee svg {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+      }
+
+      /* ─── Payment section ─────────────────────────────────────────────────── */
+      .pw-payment-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 20px;
+      }
+
+      .pw-payment-card__title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-ink);
+        margin-bottom: 16px;
+      }
+
+      #stripe-payment-element {
+        min-height: 80px;
+      }
+
+      /* ─── Pay button ──────────────────────────────────────────────────────── */
+      .pw-pay-btn {
+        width: 100%;
+        min-height: 52px;
+        background: var(--color-cta);
+        color: #fff;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(232,72,0,0.22);
+        transition: background 0.18s, box-shadow 0.18s, opacity 0.18s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      .pw-pay-btn:hover:not(:disabled) {
+        background: #d04000;
+        box-shadow: 0 12px 28px rgba(232,72,0,0.30);
+      }
+
+      .pw-pay-btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .pw-pay-btn__spinner {
+        display: none;
+        width: 18px;
+        height: 18px;
+        border: 2.5px solid rgba(255,255,255,0.35);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: pw-spin 0.7s linear infinite;
+      }
+
+      .pw-pay-btn.is-loading .pw-pay-btn__spinner { display: block; }
+      .pw-pay-btn.is-loading .pw-pay-btn__label   { display: none; }
+
+      @keyframes pw-spin { to { transform: rotate(360deg); } }
+
+      /* ─── Error banner ────────────────────────────────────────────────────── */
+      .pw-error {
+        background: #fff2f0;
+        border: 1px solid #ffccc7;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        color: #c0392b;
+        display: none;
+      }
+
+      .pw-error.is-visible { display: block; }
+
+      /* ─── Trust strip ─────────────────────────────────────────────────────── */
+      .pw-trust {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        color: var(--color-ink-soft);
+        text-align: center;
+      }
+
+      .pw-trust svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+
+      /* ─── Loading overlay (initial page load) ─────────────────────────────── */
+      .pw-init-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--color-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        transition: opacity 0.3s;
+      }
+
+      .pw-init-overlay.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .pw-init-spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(0,0,0,0.12);
+        border-top-color: var(--color-cta);
+        border-radius: 50%;
+        animation: pw-spin 0.7s linear infinite;
+      }
+
+      /* ─── Fatal error state ───────────────────────────────────────────────── */
+      .pw-fatal {
+        display: none;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .pw-fatal.is-visible { display: block; }
+      .pw-fatal__title { font-size: 1.125rem; font-weight: 700; margin-bottom: 8px; }
+      .pw-fatal__body  { font-size: 0.9375rem; color: var(--color-ink-soft); }
+
+      .pw-retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 24px;
+        background: var(--color-cta);
+        color: #fff;
+        font-family: var(--font-body);
+        font-size: 0.9375rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 520px) {
+        .pw-main { padding: 20px 16px 60px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Initial loading overlay -->
+    <div class="pw-init-overlay" id="initOverlay">
+      <div class="pw-init-spinner"></div>
+    </div>
+
+    <div class="pw-shell">
+      <header class="pw-header">
+        <img
+          class="pw-header__logo"
+          src="./assets/newmindstart-logo.png"
+          alt="NewMindStart"
+          width="234"
+          height="36"
+        />
+      </header>
+
+      <main class="pw-main" id="pwMain" hidden>
+        <!-- Plan summary -->
+        <div class="pw-plan-card" id="planCard">
+          <p class="pw-plan-card__eyebrow">Your selected plan</p>
+          <div class="pw-plan-card__row">
+            <div>
+              <p class="pw-plan-card__name" id="planName">Loading…</p>
+              <p class="pw-plan-card__desc" id="planDesc"></p>
+            </div>
+            <div class="pw-plan-card__price-block">
+              <p class="pw-plan-card__price" id="planPrice"></p>
+              <p class="pw-plan-card__price-orig" id="planPriceOrig"></p>
+            </div>
+          </div>
+          <hr class="pw-plan-card__divider" />
+          <div class="pw-plan-card__guarantee">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2 4 5.5v5c0 4.8 3.6 9.1 8 10.5 4.4-1.4 8-5.7 8-10.5v-5L12 2Z"/>
+            </svg>
+            30-day money-back guarantee
+          </div>
+        </div>
+
+        <!-- Stripe payment form -->
+        <div class="pw-payment-card" id="paymentCard">
+          <p class="pw-payment-card__title">Payment details</p>
+          <div id="stripe-payment-element"></div>
+          <div class="pw-error" id="pwError"></div>
+          <button class="pw-pay-btn" id="payBtn" disabled type="button">
+            <span class="pw-pay-btn__spinner" aria-hidden="true"></span>
+            <span class="pw-pay-btn__label" id="payBtnLabel">Complete payment</span>
+          </button>
+        </div>
+
+        <!-- Fatal / config error fallback -->
+        <div class="pw-fatal" id="fatalError">
+          <p class="pw-fatal__title">Something went wrong</p>
+          <p class="pw-fatal__body">
+            We couldn't load the payment form. Please check your connection and try again.
+          </p>
+          <button class="pw-retry-btn" id="retryBtn" type="button">Try again</button>
+        </div>
+
+        <!-- Trust line -->
+        <p class="pw-trust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Secure checkout &nbsp;·&nbsp; Powered by Stripe
+        </p>
+      </main>
+    </div>
+
+    <script src="./monitoring.js"></script>
+    <script src="./api.js"></script>
+    <script>
+      // ─── Plan display helpers ────────────────────────────────────────────────
+
+      const PLAN_META = {
+        trial:    { name: "7-Day Trial",   desc: "then renews monthly",     index: 0 },
+        core:     { name: "4-Week Plan",   desc: "monthly subscription",    index: 1 },
+        extended: { name: "12-Week Plan",  desc: "quarterly subscription",  index: 2 },
+      };
+
+      function _storageGet(key) {
+        try { return sessionStorage.getItem(key); } catch { return null; }
+      }
+
+      function _getPlanKey() {
+        const v = _storageGet("nms_offer_plan_name");
+        return (v && PLAN_META[v]) ? v : "core";
+      }
+
+      function _resolvePlan(planKey, plans) {
+        const meta = PLAN_META[planKey];
+        if (planKey === "extended") {
+          return plans.special_offer && plans.special_offer[0] ? plans.special_offer[0] : null;
+        }
+        const preferred = plans.discount_offer && plans.discount_offer[meta.index];
+        if (preferred) return preferred;
+        return plans.regular_offer && plans.regular_offer[meta.index] ? plans.regular_offer[meta.index] : null;
+      }
+
+      function _getPrice(plan) {
+        if (!plan) return null;
+        return plan.price_schedule && plan.price_schedule.phases && plan.price_schedule.phases[0]
+          ? plan.price_schedule.phases[0].price
+          : plan.price;
+      }
+
+      // ─── Stripe loader ───────────────────────────────────────────────────────
+
+      let _stripeInstance = null;
+
+      function _loadStripe(pk) {
+        return new Promise((resolve, reject) => {
+          if (window.Stripe) { resolve(window.Stripe(pk)); return; }
+          const s = document.createElement("script");
+          s.src = "https://js.stripe.com/v3/";
+          s.onload  = () => resolve(window.Stripe(pk));
+          s.onerror = () => reject(new Error("stripe_load_failed"));
+          document.head.appendChild(s);
+        });
+      }
+
+      // ─── UI helpers ──────────────────────────────────────────────────────────
+
+      const initOverlay = document.getElementById("initOverlay");
+      const pwMain      = document.getElementById("pwMain");
+      const planName    = document.getElementById("planName");
+      const planDesc    = document.getElementById("planDesc");
+      const planPrice   = document.getElementById("planPrice");
+      const planPriceOrig = document.getElementById("planPriceOrig");
+      const payBtn      = document.getElementById("payBtn");
+      const payBtnLabel = document.getElementById("payBtnLabel");
+      const pwError     = document.getElementById("pwError");
+      const fatalError  = document.getElementById("fatalError");
+      const paymentCard = document.getElementById("paymentCard");
+      const retryBtn    = document.getElementById("retryBtn");
+
+      function _showMain() {
+        initOverlay.classList.add("is-hidden");
+        pwMain.hidden = false;
+      }
+
+      function _showFatal() {
+        initOverlay.classList.add("is-hidden");
+        pwMain.hidden = false;
+        paymentCard.hidden = true;
+        fatalError.classList.add("is-visible");
+      }
+
+      function _setPayBtnLoading(on) {
+        payBtn.classList.toggle("is-loading", on);
+        payBtn.disabled = on;
+      }
+
+      function _showError(msg) {
+        pwError.textContent = msg;
+        pwError.classList.add("is-visible");
+      }
+
+      function _clearError() {
+        pwError.textContent = "";
+        pwError.classList.remove("is-visible");
+      }
+
+      // ─── Main init ───────────────────────────────────────────────────────────
+
+      let _elements = null;
+
+      async function _init() {
+        try {
+          // Init QuizAPI (loads config + plans)
+          await QuizAPI.init();
+
+          const plans   = QuizAPI.getPlans();
+          const stripePk = QuizAPI.getStripePk();
+          const planKey  = _getPlanKey();
+          const meta     = PLAN_META[planKey];
+          const plan     = _resolvePlan(planKey, plans);
+          const price    = _getPrice(plan);
+
+          // Populate plan card
+          planName.textContent  = meta.name;
+          planDesc.textContent  = meta.desc;
+          planPrice.textContent = price || "—";
+          // Show original price for discount_offer plans
+          if (planKey !== "extended" && plans.regular_offer) {
+            const origPlan  = plans.regular_offer[meta.index];
+            const origPrice = _getPrice(origPlan);
+            if (origPrice && origPrice !== price) {
+              planPriceOrig.textContent = origPrice;
+            }
+          }
+
+          if (!plan || !plan.id) throw new Error("no_plan_id");
+          if (!stripePk || stripePk.startsWith("pk_live_REPLACE")) throw new Error("stripe_not_configured");
+
+          // Load Stripe.js + create payment intent in parallel
+          const [stripe, clientSecret] = await Promise.all([
+            _loadStripe(stripePk),
+            QuizAPI.createPaymentIntent(plan.id),
+          ]);
+          _stripeInstance = stripe;
+
+          // Mount Stripe Payment Element
+          const appearance = {
+            theme: "stripe",
+            variables: {
+              colorPrimary:         "#0050ff",
+              colorBackground:      "#ffffff",
+              colorText:            "#191919",
+              colorDanger:          "#c0392b",
+              fontFamily:           "Satoshi, Avenir Next, Segoe UI, sans-serif",
+              spacingUnit:          "4px",
+              borderRadius:         "8px",
+              fontSizeBase:         "15px",
+            },
+            rules: {
+              ".Input": { border: "1.5px solid #e2e6ef", boxShadow: "none" },
+              ".Input:focus": { border: "1.5px solid #0050ff", boxShadow: "0 0 0 3px rgba(0,80,255,0.10)" },
+            },
+          };
+
+          _elements = stripe.elements({ clientSecret, appearance });
+          const paymentElement = _elements.create("payment", { layout: "tabs" });
+          paymentElement.mount("#stripe-payment-element");
+
+          paymentElement.on("ready", () => {
+            payBtn.disabled = false;
+          });
+
+          payBtn.addEventListener("click", _handlePay);
+          _showMain();
+
+        } catch (err) {
+          console.error("[Paywall] Init failed:", err.message);
+          NMSMonitoring && NMSMonitoring.captureException(err, { step: "paywall_init" });
+          _showFatal();
+        }
+      }
+
+      async function _handlePay() {
+        if (!_stripeInstance || !_elements) return;
+        _clearError();
+        _setPayBtnLoading(true);
+
+        if (typeof QuizAPI !== "undefined") {
+          QuizAPI.submit({ data: { payment_status: "attempted" } });
+        }
+
+        const successUrl = QuizAPI.getSuccessUrl
+          ? (QuizAPI.getSuccessUrl() || window.location.origin)
+          : window.location.origin;
+
+        const { error } = await _stripeInstance.confirmPayment({
+          elements:       _elements,
+          confirmParams:  { return_url: successUrl },
+          redirect:       "if_required",
+        });
+
+        if (error) {
+          _setPayBtnLoading(false);
+          _showError(error.message || "Payment failed. Please try again.");
+          if (typeof QuizAPI !== "undefined") {
+            QuizAPI.submit({ data: { payment_status: "failed", payment_error: error.code || error.type } });
+          }
+          NMSMonitoring && NMSMonitoring.captureMessage("payment_failed", { code: error.code, type: error.type });
+        } else {
+          // No redirect means payment was confirmed inline (unlikely with PI, but handle gracefully)
+          if (typeof QuizAPI !== "undefined") {
+            QuizAPI.submit({ data: { payment_status: "success" } });
+            QuizAPI.trackFB("Purchase");
+          }
+          window.location.href = successUrl;
+        }
+      }
+
+      retryBtn.addEventListener("click", () => {
+        fatalError.classList.remove("is-visible");
+        paymentCard.hidden = false;
+        initOverlay.classList.remove("is-hidden");
+        pwMain.hidden = true;
+        _init();
+      });
+
+      // Start
+      _init();
+    </script>
+  </body>
+</html>

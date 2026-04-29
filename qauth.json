@@ -1,0 +1,21 @@
+{
+  "name": "Relationships Quiz",
+  "slug": "relationships",
+  "api_key": "qz_REPLACE_WITH_API_KEY",
+  "endpoint": "https://newmindstart.com/api/external-quizzes/relationships",
+  "payment_intent_url": "https://newmindstart.com/api/external-quizzes/relationships/create-payment-intent",
+  "stripe_pk": "pk_live_REPLACE_WITH_STRIPE_PUBLIC_KEY",
+  "success_url": "https://newmindstart.com/checkout-payment-success",
+  "sentry_dsn": "",
+  "sentry_environment": "production",
+  "sentry_release": "relationships@1.0.0",
+  "statsig": {
+    "enabled": true,
+    "client_key": "client-REPLACE_WITH_STATSIG_KEY",
+    "environment": "production",
+    "experiment_name": "relationships_offer_theme_test",
+    "variant_parameter": "offer_theme",
+    "sdk_url": "https://cdn.jsdelivr.net/npm/@statsig/js-client@3/build/statsig-js-client.min.js",
+    "timeout_ms": 1200
+  }
+}
