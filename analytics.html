@@ -1152,7 +1152,7 @@
           <div class="an-section-head">
             <div>
               <p class="an-section-label">Offer Theme A/B Test</p>
-              <div class="an-section-note">Orange vs Blue vs Green, using Statsig assignments only for decision readouts.</div>
+              <div class="an-section-note">Version C (Green) only — A/B test paused. Orange/Blue variants kept for future use.</div>
             </div>
             <div class="an-help">
               <button class="an-help__btn" id="abHelpButton" type="button" aria-expanded="false" aria-controls="abHelpPopover">?</button>
@@ -1170,6 +1170,7 @@
               <p class="an-ab-health__value" id="abExperimentName">-</p>
               <div class="an-ab-health__sub" id="abExperimentStart">-</div>
             </article>
+            <!-- A/B paused: Orange (A) and Blue (B) cards hidden — restore when test resumes
             <article class="an-ab-health__card">
               <p class="an-ab-health__label">Orange</p>
               <p class="an-ab-health__value" id="abOrangeSessions">-</p>
@@ -1180,6 +1181,7 @@
               <p class="an-ab-health__value" id="abBlueSessions">-</p>
               <div class="an-ab-health__sub">Variant B / blue</div>
             </article>
+            -->
             <article class="an-ab-health__card">
               <p class="an-ab-health__label">Green</p>
               <p class="an-ab-health__value" id="abGreenSessions">-</p>
@@ -1216,14 +1218,13 @@
                 <thead>
                   <tr>
                     <th>Checkpoint</th>
-                    <th>Orange</th>
-                    <th>Blue</th>
+                    <!-- A/B paused: <th>Orange</th><th>Blue</th> -->
                     <th>Green</th>
                     <th>Best delta</th>
                   </tr>
                 </thead>
                 <tbody id="abFunnelBody">
-                  <tr><td colspan="5">Loading...</td></tr>
+                  <tr><td colspan="3">Loading...</td></tr>
                 </tbody>
               </table>
             </div>

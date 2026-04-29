@@ -34,9 +34,9 @@ const Analytics = (() => {
   ];
 
   const VARIANTS = [
-    { key: "orange", code: "A", label: "Orange", aliases: ["a", "orange"] },
-    { key: "blue", code: "B", label: "Blue", aliases: ["b", "blue"] },
-    { key: "green", code: "C", label: "Green", aliases: ["c", "green"] },
+    // { key: "orange", code: "A", label: "Orange", aliases: ["a", "orange"] }, // A/B paused
+    // { key: "blue",   code: "B", label: "Blue",   aliases: ["b", "blue"]   }, // A/B paused
+    { key: "green",  code: "C", label: "Green",  aliases: ["c", "green"]  },
   ];
 
   const STEPS_ORDER = [
@@ -486,8 +486,8 @@ const Analytics = (() => {
 
     _setText("abExperimentName", _abExperimentName);
     _setText("abExperimentStart", `Start ${AB_EXPERIMENT_START_AT.slice(0, 10)}`);
-    _setText("abOrangeSessions", groups.orange.length.toLocaleString());
-    _setText("abBlueSessions", groups.blue.length.toLocaleString());
+    // _setText("abOrangeSessions", groups.orange.length.toLocaleString()); // A/B paused
+    // _setText("abBlueSessions",  groups.blue.length.toLocaleString());   // A/B paused
     _setText("abGreenSessions", groups.green.length.toLocaleString());
     const statusEl = document.getElementById("abHealthStatus");
     if (statusEl) {

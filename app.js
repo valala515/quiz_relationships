@@ -91,8 +91,12 @@ function applyOfferTheme(theme) {
 function syncAssignedOfferTheme() {
   const override = getOfferThemeOverride();
   if (override) return applyOfferTheme(override);
+  // A/B test paused — always serve version C (green) for now.
+  return applyOfferTheme("green");
+  /* Restore when A/B test resumes:
   const assigned = typeof QuizAPI !== "undefined" ? normalizeOfferTheme(QuizAPI.getAbVariant()) : "";
   return applyOfferTheme(assigned || "blue");
+  */
 }
 
 const introSteps = [
@@ -2291,9 +2295,9 @@ function getOfferOfferData() {
       id: "trial",
       label: "7-day trial",
       originalPrice: expired ? null : "$17.77",
-      currentPrice: expired ? "$17.77" : "$6.90",
-      originalDailyPrice: expired ? null : "$2.53",
-      dailyPrice: expired ? "$2.53" : "$0.98",
+      currentPrice: expired ? "$17.77" : "$6.93",
+      originalDailyPrice: expired ? null : "$2.54",
+      dailyPrice: expired ? "$2.54" : "$0.99",
       selected: state.offer.selectedPlan === "trial",
       badge: ""
     },
@@ -2301,9 +2305,9 @@ function getOfferOfferData() {
       id: "core",
       label: "4-week plan",
       originalPrice: expired ? null : "$38.95",
-      currentPrice: expired ? "$38.95" : "$15.20",
-      originalDailyPrice: expired ? null : "$1.29",
-      dailyPrice: expired ? "$1.29" : "$0.50",
+      currentPrice: expired ? "$38.95" : "$15.19",
+      originalDailyPrice: expired ? null : "$1.30",
+      dailyPrice: expired ? "$1.30" : "$0.50",
       selected: state.offer.selectedPlan === "core",
       badge: "Most popular"
     },
@@ -2311,9 +2315,9 @@ function getOfferOfferData() {
       id: "extended",
       label: "12-week plan",
       originalPrice: expired ? null : "$94.85",
-      currentPrice: expired ? "$94.85" : "$41.60",
+      currentPrice: expired ? "$94.85" : "$36.99",
       originalDailyPrice: expired ? null : "$1.05",
-      dailyPrice: expired ? "$1.05" : "$0.46",
+      dailyPrice: expired ? "$1.05" : "$0.41",
       selected: state.offer.selectedPlan === "extended",
       badge: ""
     }
@@ -2323,10 +2327,10 @@ function getOfferOfferData() {
   const legalHtml = expired
     ? `By clicking "GET MY PLAN", you agree to automatic subscription renewal. ${selectedPlan.label.toUpperCase()} is billed at ${selectedPlan.currentPrice}. Cancel via email: hello@newmindstart.com.`
     : selectedPlan.id === "trial"
-      ? 'By clicking "GET MY PLAN", you agree to a 1-week trial at <s>$17.77</s> $6.90, converting to a <s>$38.95</s> $15.20/month auto-renewing subscription if not canceled. Cancel via email: hello@newmindstart.com.'
+      ? 'By clicking "GET MY PLAN", you agree to a 1-week trial at <s>$17.77</s> $6.93, converting to a <s>$38.95</s> $15.19/month auto-renewing subscription if not canceled. Cancel via email: hello@newmindstart.com.'
       : selectedPlan.id === "core"
-        ? 'By clicking "GET MY PLAN", you agree to automatic subscription renewal. First month is <s>$38.95</s> $15.20, then $38.95/month. Cancel via email: hello@newmindstart.com.'
-        : 'By clicking "GET MY PLAN", you agree to automatic subscription renewal. First three months are <s>$94.85</s> $41.60, then $94.85 per three months. Cancel via email: hello@newmindstart.com.';
+        ? 'By clicking "GET MY PLAN", you agree to automatic subscription renewal. First month is <s>$38.95</s> $15.19, then $38.95/month. Cancel via email: hello@newmindstart.com.'
+        : 'By clicking "GET MY PLAN", you agree to automatic subscription renewal. First three months are <s>$94.85</s> $36.99, then $94.85 per three months. Cancel via email: hello@newmindstart.com.';
 
   return {
     ageRange,
@@ -2489,8 +2493,8 @@ function openOfferUpsellOrNavigate(e) {
 
     const extendedPlan = offer.plans.find((p) => p.id === "extended");
     const upsellOriginal = "$94.85";
-    const upsellCurrent = extendedPlan.currentPrice;
-    const upsellPct = 61;
+    const upsellCurrent = "$27.49";
+    const upsellPct = 71;
     const upsellLegal = `By clicking "Claim special offer", you agree to automatic subscription renewal. First three months are ${upsellCurrent}, then $94.85 per three months. Cancel via email: hello@newmindstart.com.`;
 
     const overlay = document.createElement("div");
@@ -2557,7 +2561,7 @@ function renderOfferStep() {
   const activeOfferTheme = syncAssignedOfferTheme();
 
   if (typeof QuizAPI !== "undefined") {
-    QuizAPI.submit({ data: { step: "offer-page", offer_theme: activeOfferTheme } });
+    QuizAPI.submit({ data: { step: "offer-page" } });
     QuizAPI.trackFB("InitiateCheckout");
   }
 

@@ -51,6 +51,7 @@
 html {
   font-size: 16px;
   overflow-x: hidden;
+  overflow-x: clip; /* clip doesn't create a scroll container — fixes position:sticky on iOS Safari */
 }
 
 body {
@@ -65,6 +66,7 @@ body {
     #ffffff;
   position: relative;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 button,
@@ -4940,6 +4942,15 @@ body:not(.is-offer-expired) .offer-plan-option__daily-copy {
 
   body.is-evidence-screen .page-shell {
     padding-top: var(--header-height);
+  }
+
+  /* All continue buttons stick to the bottom of the viewport while scrolling on mobile.
+     Excludes multiselect-continue and profile-summary__continue which are handled
+     by their own sticky wrapper divs (.multiselect-sticky-footer / .psum-sticky-footer). */
+  .button-continue:not(.multiselect-continue):not(.profile-summary__continue) {
+    position: sticky;
+    bottom: env(safe-area-inset-bottom, 0px);
+    z-index: 20;
   }
 
   .screen-profile-summary {

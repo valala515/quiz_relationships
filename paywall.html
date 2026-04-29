@@ -579,9 +579,9 @@
           }
           NMSMonitoring && NMSMonitoring.captureMessage("payment_failed", { code: error.code, type: error.type });
         } else {
-          // No redirect means payment was confirmed inline (unlikely with PI, but handle gracefully)
+          // Payment confirmed inline — POST paid status so backend marks session as paid
           if (typeof QuizAPI !== "undefined") {
-            QuizAPI.submit({ data: { payment_status: "success" } });
+            QuizAPI.submit({ data: { payment_status: "paid" } });
             QuizAPI.trackFB("Purchase");
           }
           window.location.href = successUrl;

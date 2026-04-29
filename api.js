@@ -309,8 +309,8 @@ const QuizAPI = (() => {
       NMSMonitoring && NMSMonitoring.captureMessage("api_config_failed", { error: err.message });
     }
 
-    // 4. A/B variant (Statsig or fallback to A)
-    await _initAbTest(_config.statsig);
+    // 4. A/B variant — skipped, no active experiment
+    // await _initAbTest(_config.statsig);
 
     // 5. Send UTMs immediately if present
     const utms = _getUTMParams();
@@ -328,7 +328,7 @@ const QuizAPI = (() => {
   function init() {
     if (!_initPromise) {
       _initPromise = _doInit()
-        .then(() => console.log("[QuizAPI] Init complete — variant:", getAbVariant(), "source:", getAbSource()))
+        .then(() => console.log("[QuizAPI] Init complete"))
         .catch((err) => console.error("[QuizAPI] Init failed:", err));
     }
     return _initPromise;
@@ -341,9 +341,7 @@ const QuizAPI = (() => {
     const body = Object.assign(
       {
         submission_uid: _getCurrentUID(),
-        ab_variant:     getAbVariant(),
-        variant_source: getAbSource(),
-        experiment_id:  getAbExpId(),
+        // A/B test not active — ab_variant / variant_source / experiment_id omitted
       },
       payload
     );

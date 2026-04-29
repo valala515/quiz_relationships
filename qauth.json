@@ -1,7 +1,7 @@
 {
   "name": "Relationships Quiz",
   "slug": "relationships",
-  "api_key": "qz_REPLACE_WITH_API_KEY",
+  "api_key": "qz_wX5bAEOQjqPSeS4C7Q1kBYS9SUZ2TPaK",
   "endpoint": "https://newmindstart.com/api/external-quizzes/relationships",
   "payment_intent_url": "https://newmindstart.com/api/external-quizzes/relationships/create-payment-intent",
   "stripe_pk": "pk_live_REPLACE_WITH_STRIPE_PUBLIC_KEY",
